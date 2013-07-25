@@ -16,9 +16,8 @@ package
 			FlxG.bgColor = 0xff444444;
 		    add(new FlxText(10, -120, 100, "YOU DID IT!"));
 		
-			_player = new Player(50, 100);
+			_player = new Player(50, 100, this);
 			add(_player);
-			add(_player.Bombs);
 			
 			_spawner = new BuildingSpawner(_player);
 			_spawner.beginSpawning();
@@ -34,7 +33,7 @@ package
 			super.update();
 			
 			FlxG.collide(_player, _spawner);
-			FlxG.collide(_player.Bombs, _spawner);
+			FlxG.collide(_player.Explosive, _spawner);
 			//Check if the player fell
 			if (_player.y > _spawner.LastBuilding.y + _spawner.LastBuilding.height)
 				_player.kill();
@@ -45,9 +44,10 @@ package
 			//Debug testing
 			if (FlxG.keys.ENTER)
 			{
-				for (var i:int = 0; i < this.length; i++)
+				for each(var o:* in members)
 				{
-					this.members[i]
+					var object:FlxBasic = o as FlxBasic;
+					object.destroy();
 				}
 				this.clear();
 				FlxG.resetGame();
@@ -56,7 +56,9 @@ package
 		
 		public function GameOver():void
 		{
-			add(new FlxText(100, 100, 300, "YOU LOSE"));
+			var text:FlxText = new FlxText(200, 200, 200, "YOU LOSE!");
+			text.scrollFactor = new FlxPoint(0, 0);
+			add(text);
 		}
 	}
 

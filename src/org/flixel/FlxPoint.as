@@ -98,5 +98,25 @@ package org.flixel
 			FlashPoint.y = y;
 			return FlashPoint;
 		}
+		
+		public function Normalize():void 
+		{
+			var directions:FlxPoint = new FlxPoint();
+			
+			if (this.x < 0) directions.x = -1;
+			else if (this.x > 0) directions.x = 1;
+			else directions.x = 0;
+			
+			if (this.y < 0) directions.y = -1;
+			else if (this.y > 0) directions.y = 1;
+			else directions.y = 0;
+			
+			
+			var hold:Number = Math.abs(this.x ^ 2 + this.y ^ 2);
+			var length:Number = Math.sqrt(hold);
+			
+			this.x = this.x / length * directions.x;
+			this.y = this.y / length * directions.y;
+		}
 	}
 }

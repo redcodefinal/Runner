@@ -7,7 +7,7 @@ package
 	 */
 	public class BuildingSpawner extends FlxGroup
 	{
-		public var LastBuilding:Building;
+		public var LastBuilding:FancyBuilding;
 		public var IsSpawning:Boolean;
 		
 		private var _player:Player;
@@ -28,11 +28,11 @@ package
 			_player = player;
 		}
 		
-		public function addBuilding(X:int, Y:int, Width:int, Height:int)
+		public function addBuilding(X:int, Y:int, Width:int)
 		{
-			var b:Building = new Building(X, Y, Width, Height, _player);
+			var b:FancyBuilding = new FancyBuilding(X, Y, Width, _player);
 			LastBuilding = b;
-			this.add(b);
+			this.add(b.Group);
 		}
 		
 		override public function update():void 
@@ -60,7 +60,7 @@ package
 			var gapy:int = getRandomBuildingGapY();
 			var width:int = getRandomBuildingWidth();
 			
-			addBuilding(LastBuilding.x + LastBuilding.width + gapx, LastBuilding.y + gapy, width, 400);
+			addBuilding(LastBuilding.x + LastBuilding.width + gapx, LastBuilding.y + gapy, width);
 		}
 		
 		public function beginSpawning()
@@ -70,7 +70,7 @@ package
 			//if there are no members create a platform under the player and plats for the player to jump to.
 			if (this.members.length == 0)
 			{
-				addBuilding(_player.x - 50, _player.y + 20, getRandomBuildingWidth(), 400);
+				addBuilding(_player.x - 50, _player.y + 50, 10);
 				spawnBuilding();
 				spawnBuilding();
 			}
@@ -83,7 +83,7 @@ package
 		
 		public function getRandomBuildingWidth():int
 		{
-			return Math.random() * MAXBUILDINGWIDTH + MINBUILDINGWIDTH;
+			return (int)(Math.random() * 10 + 2);
 		}
 		
 		public function getRandomBuildingGapX():int
@@ -94,6 +94,13 @@ package
 		public function getRandomBuildingGapY():int
 		{
 			return Math.random() * (MAXBUILDINGGAPY - MINBUILDINGGAPY) + MINBUILDINGGAPY;
+		}
+		
+		override public function destroy():void 
+		{
+			super.destroy();
+			
+			LastBuilding = null;
 		}
 		
 	}
